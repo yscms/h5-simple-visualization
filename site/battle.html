@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+    <title>作战首页</title>
+
+    <!--  引入百度地图  -->
+    <script src="http://api.map.baidu.com/api?v=2.0&ak=kyuRcpDLU5HuYmFmkRXGGOxeQ6zVo7KK" type="text/javascript"></script>
+
+    <!--  加载鼠标绘制工具  -->
+    <script src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js" type="text/javascript"></script>
+    <link href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" rel="stylesheet"/>
+
+    <!--  加载检索信息窗口  -->
+    <script src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js" type="text/javascript"></script>
+    <link href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" rel="stylesheet"/>
+
+    <!--  引入echarts  -->
+    <script src="../libs/js/echarts.js" type="text/javascript"></script>
+</head>
+<style type="text/css">
+    html, body {
+        overflow: hidden;
+        height: 100%;
+        background: linear-gradient(#104BAA, #000000);
+        margin: 0;
+        padding: 0;
+    }
+    p, ul, li {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+    .title {
+        width: 80%;
+        height: 80px;
+        font-size: 50px;
+        text-align: center;
+        font-family: Arial, 华文新魏;
+        font-weight: bold;
+        background-color: #0099ff;
+        margin-top: 30px;
+        line-height: 80px;;
+        float: left;
+        color: #00FFCC;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0 0 15px 1px #20558b;
+        position: relative;
+    }
+    .ret {
+        width: 9%;
+        height: 80px;
+        margin-top: 30px;
+        float: left;
+    }
+    .ret img {
+        width: 50px;
+        height: 50px;
+        margin-top: 15px;
+        margin-left: 20px;
+    }
+    .ho {
+        width: 9%;
+        height: 80px;
+        margin-top: 30px;
+        float: left;
+    }
+    .ho img {
+        width: 50px;
+        height: 50px;
+        margin-top: 15px;
+        margin-left: 20px;
+    }
+    .home {
+        width: 96%;
+        height: 360px;
+        border: 1px solid #0099ff;
+        border-radius: 30px;
+        margin-left: 2%;
+        margin-top: 160px;
+        box-shadow: 0 0 15px 1px #20558b;
+    }
+    .tit_left {
+        width: 61%;
+        height: 50px;
+        float: left;
+        position: relative;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0 0 15px 1px #20558b;
+        margin-left: 2%;
+        font-size: 25px;
+        text-align: center;
+        font-family: Arial, 华文新魏;
+        font-weight: bold;
+        color: #ffffff;
+        line-height: 50px;
+    }
+    .tit_right {
+        width: 30%;
+        height: 50px;
+        float: left;
+        padding-left: 3%;
+        position: relative;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0 0 15px 1px #20558b;
+        margin-left: 1%;
+        font-size: 25px;
+        text-align: center;
+        font-family: Arial, 华文新魏;
+        font-weight: bold;
+        color: #ffffff;
+        line-height: 50px;
+    }
+    .right_auto {
+        width: 33%;
+        height: 290px;
+        margin-left: 1%;
+        margin-top: 10px;
+        float: left;
+        overflow: auto;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0 0 15px 1px #20558b;
+        position: relative;
+    }
+    .auto_1 {
+        width: 100%;
+        height: 290px;
+        margin-left: 1%;
+        float: left;
+        overflow: auto;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0 0 15px 1px #20558b;
+        position: relative;
+    }
+    .auto_1 table {
+        width: 100%;
+    }
+    .auto_1 table td {
+        width: 40%;
+        height: 45px;
+        line-height: 45px;
+        font-size: 25px;
+        font-family: '华文新魏';
+        color: #ffffff;
+        text-align: center;
+    }
+    .vehicle {
+        width: 96%;
+        height: 360px;
+        border: 1px solid #0099ff;
+        border-radius: 30px;
+        margin-left: 2%;
+        margin-top: 40px;
+        box-shadow: 0 0 15px 1px #20558b;
+    }
+    .people {
+        width: 96%;
+        height: 360px;
+        border: 1px solid #0099ff;
+        border-radius: 30px;
+        margin-left: 2%;
+        margin-top: 40px;
+        box-shadow: 0 0 15px 1px #20558b;
+    }
+    .moddle {
+        width: 60%;
+        height: 290px;
+        margin-top: 10px;
+        margin-left: 3%;
+        float: left;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0 0 15px 1px #20558b;
+        position: relative;
+    }
+    .content {
+        width: 30%;
+        height: 290px;
+        margin-left: 3%;
+        margin-top: 10px;
+        float: left;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0 0 15px 1px #20558b;
+        position: relative;
+    }
+    .auto {
+        width: 100%;
+        height: 200px;
+        overflow: auto;
+        margin-top: 20px;
+    }
+    .cont {
+        width: 80%;
+        height: 40px;
+        background-color: #0099ff;
+        margin-top: 15px;
+        margin-left: 10%;
+        line-height: 40px;
+        font-size: 20px;
+        font-family: '华文新魏';
+        text-align: center;
+        color: #00FFCC;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0px 0px 15px 1px #20558b;
+    }
+    .content .tit {
+        width: 80%;
+        height: 40px;
+        line-height: 40px;
+        font-size: 25px;
+        font-family: '华文新魏';
+        text-align: center;
+        background-color: #0099ff;
+        margin-top: 15px;
+        margin-left: 10%;
+        border-radius: 30px;
+        color: #00FFCC;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0 0 15px 1px #20558b;
+    }
+    .moddle .ifra {
+        width: 96%;
+        height: 270px;
+        margin-left: 2%;
+        margin-top: 5px;
+    }
+    p {
+        width: 100%;
+        height: 50px;
+        font-size: 25px;
+        text-align: center;
+        font-family: Arial, 华文新魏;
+        font-weight: bold;
+        line-height: 50px;
+        background-color: #ffffff;
+        color: #104BAA;
+        border-bottom: 1px solid #0099ff;
+        border-radius: 25px 25px 0 0;
+    }
+    .clear {
+        clear: both;
+    }
+    .bj-1 {
+        position: absolute;
+        left: -1px;
+        top: -1px;
+    }
+    .bj-2 {
+        position: absolute;
+        right: -1px;
+        top: -1px;
+    }
+    .bj-3 {
+        position: absolute;
+        right: -1px;
+        bottom: -1px;
+    }
+    .bj-4 {
+        position: absolute;
+        left: -1px;
+        bottom: -1px;
+    }
+</style>
+<body>
+<div class="ret">
+    <a href="./index.html">
+        <img src="../libs/img/z_2.png"/>
+    </a>
+</div>
+<div class="title">
+    智慧安全消防信息可视化系统
+    <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+    <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+    <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+    <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+    </img>
+    </img>
+    </img>
+    </img>
+</div>
+<div class="ho">
+    <a href="./detail.html">
+        <img src="../libs/img/f_3.png"/>
+    </a>
+</div>
+<div class="home">
+    <p style="color:#00FFCC;background-color: rgba(0,24,106,0.5);border: 1px solid #20558b;box-shadow: 0 0 15px 1px #20558b;">
+        山水人家着火建筑信息展示
+    </p>
+    <div class="moddle">
+        <iframe class="ifra" src="../libs/model/mx1.html">
+        </iframe>
+        <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+        <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+        <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+        <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+    </div>
+    <div class="right_auto">
+        <div class="auto_1">
+            <table>
+                <tr>
+                    <td style="color:#00FFCC;background-color: rgba(0,24,106,0.5);border: 1px solid #20558b;box-shadow: 0 0 15px 1px #20558b;">
+                        负责人
+                    </td>
+                    <td>
+                        张三
+                    </td>
+                </tr>
+                <tr>
+                    <td style="color:#00FFCC;background-color: rgba(0,24,106,0.5);border: 1px solid #20558b;box-shadow: 0 0 15px 1px #20558b;">
+                        联系电话
+                    </td>
+                    <td>
+                        1885509xxxx
+                    </td>
+                </tr>
+                <tr>
+                    <td style="color:#00FFCC;background-color: rgba(0,24,106,0.5);border: 1px solid #20558b;box-shadow: 0 0 15px 1px #20558b;">
+                        建筑面积（平方米）
+                    </td>
+                    <td>
+                        2525
+                    </td>
+                </tr>
+                <tr>
+                    <td style="color:#00FFCC;background-color: rgba(0,24,106,0.5);border: 1px solid #20558b;box-shadow: 0 0 15px 1px #20558b;">
+                        层数
+                    </td>
+                    <td>
+                        6
+                    </td>
+                </tr>
+                <tr>
+                    <td style="color:#00FFCC;background-color: rgba(0,24,106,0.5);border: 1px solid #20558b;box-shadow: 0 0 15px 1px #20558b;">
+                        地下层数
+                    </td>
+                    <td>
+                        2
+                    </td>
+                </tr>
+                <tr>
+                    <td style="color:#00FFCC;background-color: rgba(0,24,106,0.5);border: 1px solid #20558b;box-shadow: 0 0 15px 1px #20558b;">
+                        建筑类别
+                    </td>
+                    <td>
+                        一级住宅建筑
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+        <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+        <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+        <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+    </div>
+</div>
+<div class="people">
+    <a href="./people.html">
+        <div class="tit_left"
+             style="color:#00FFCC;background-color: rgba(0,24,106,0.5);border: 1px solid #20558b;box-shadow: 0 0 15px 1px #20558b;">
+            消防员信息监控
+        </div>
+        <div class="tit_right">
+            <marquee behavior="alternate"
+                     style="font-size: 25px;font-weight:bold;color:#00FF66;font-family: '华文新魏';width: 100%;">
+                着火建筑内部5名消防员状态目前正常
+            </marquee>
+        </div>
+    </a>
+    <div class="moddle" style="width: 94%;">
+        <iframe class="ifra" src="../libs/model/showModel.html" style="width: 96%;">
+        </iframe>
+        <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+        <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+        <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+        <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+    </div>
+</div>
+<div class="vehicle">
+    <div class="tit_left"
+         style="color:#00FFCC;background-color: rgba(0,24,106,0.5);border: 1px solid #20558b;box-shadow: 0 0 15px 1px #20558b;">
+        消防车信息监控
+    </div>
+    <div class="tit_right">
+        <marquee behavior="alternate"
+                 style="font-size: 25px;font-weight:bold;color:#FF00FF;font-family: '华文新魏';width: 100%;">
+            一号水罐泡沫消防车电压偏低，请立即修理
+        </marquee>
+    </div>
+    <div class="moddle">
+        <iframe class="ifra" src="../libs/model/max_1.html">
+        </iframe>
+        <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+        <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+        <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+        <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+    </div>
+    <div class="content">
+        <div class="tit">
+            车辆信息
+        </div>
+        <ul>
+            <div class="auto">
+                <a href="./vehicle.html">
+                    <li class="cont" style="color: #FF00FF;">
+                        一号水罐泡沫消防车
+                    </li>
+                </a>
+                <li class="cont">
+                    二号水罐泡沫消防车
+                </li>
+                <li class="cont">
+                    一号举高消防救援车
+                </li>
+                <li class="cont">
+                    二号举高消防救援车
+                </li>
+                <li class="cont">
+                    一号供水消防车
+                </li>
+                <li class="cont">
+                    二号供水消防车
+                </li>
+            </div>
+        </ul>
+        <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+        <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+        <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+        <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+    </div>
+</div>
+<div class="clear"></div>
+</body>
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>3D Model</title>
+    <script src="three.js"></script>
+
+    <script src="OrbitControls.js"></script>
+    <script src="MTLLoader.js"></script>
+    <script src="dat.gui.min.js"></script>
+
+    <script src="OBJLoader2.js"></script>
+    <script src="WWOBJLoader2.js"></script>
+
+    <style>
+        body {
+            font-family: Monospace;
+            background-color: #ffffff;
+            color: #fff;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+            border: none;
+            cursor: default;
+        }
+
+        #info {
+            color: #fff;
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            text-align: center;
+            z-index: 100;
+            display: block;
+        }
+
+        #info a {
+            color: #f00;
+            font-weight: bold;
+            text-decoration: underline;
+            cursor: pointer
+        }
+
+        #glFullscreen {
+            width: 100%;
+            height: 100vh;
+            min-width: 10px;
+            min-height: 10px;
+            position: relative;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        #example {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-color: #000000;
+        }
+
+        #feedback {
+            color: darkorange;
+        }
+
+        #dat {
+            user-select: none;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-Index: 200
+        }
+
+        #fileUploadInput {
+            display: none;
+        }
+
+    </style>
+
+</head>
+<body style="">
+<div id="glFullscreen">
+    <canvas id="example"></canvas>
+</div>
+<div id="dat">
+</div>
+<div id="info">
+    <div id="feedback"></div>
+</div>
+<input id="fileUploadInput" type="file" name="files[]" multiple accept=".obj,.mtl"/>
+</body>
+</html>
+
+<script>
+
+    'use strict';
+
+    var WWOBJLoader2Example = (function () {
+
+        var Validator = THREE.OBJLoader2.prototype._getValidator();
+
+        function WWOBJLoader2Example(elementToBindTo) {
+            this.renderer = null;
+            this.canvas = elementToBindTo;
+            this.aspectRatio = 1;
+            this.recalcAspectRatio();
+
+            this.scene = null;
+            this.cameraDefaults = {
+                posCamera: new THREE.Vector3(0, 171, 400),//0, 171, 100
+                posCameraTarget: new THREE.Vector3(0, 0, 0),
+                near: 1,
+                far: 10000,//10000
+                fov: 41
+            };
+
+            this.camera = null;
+            this.cameraTarget = this.cameraDefaults.posCameraTarget;
+            this.controls = null;
+            this.smoothShading = true;
+            this.doubleSide = false;
+            this.streamMeshes = true;
+            this.cube = null;
+            this.pivot = null;
+
+            this.wwObjLoader2 = new THREE.OBJLoader2.WWOBJLoader2();
+            this.wwObjLoader2.setCrossOrigin('anonymous');
+
+            // Check for the various File API support.
+            this.fileApiAvailable = true;
+            if (window.File && window.FileReader && window.FileList && window.Blob) {
+
+                console.log('File API is supported! Enabling all features.');
+
+            } else {
+
+                this.fileApiAvailable = false;
+                console.warn('File API is not supported! Disabling file loading.');
+
+            }
+        }
+
+        function updateParentRotation() {
+            parent.rotation.y = app.camera.rotation.y;
+        }
+
+        WWOBJLoader2Example.prototype.initGL = function () {
+            this.renderer = new THREE.WebGLRenderer({
+                canvas: this.canvas,
+                antialias: true,
+                autoClear: true
+            });
+
+            // 设置背景色
+            this.renderer.setClearColor(0x104BAA);//010101 0x104E8B
+            this.scene = new THREE.Scene();
+            this.camera = new THREE.PerspectiveCamera(this.cameraDefaults.fov, this.aspectRatio, this.cameraDefaults.near, this.cameraDefaults.far);
+
+            this.resetCamera();
+            this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+            var ambientLight = new THREE.AmbientLight(0xf9f9f9);
+            var directionalLight1 = new THREE.DirectionalLight(0xffffff);
+            var directionalLight2 = new THREE.DirectionalLight(0xffffff);
+            directionalLight1.position.set(-100, -10, 100);
+            directionalLight2.position.set(100, 10, -100);
+
+            this.scene.add(directionalLight1);
+            this.scene.add(directionalLight2);
+            this.scene.add(ambientLight);
+
+            this.createPivot();
+        };
+
+        WWOBJLoader2Example.prototype.createPivot = function () {
+            this.pivot = new THREE.Object3D();
+            this.pivot.name = 'Pivot';
+            this.scene.add(this.pivot);
+        };
+
+        WWOBJLoader2Example.prototype.initPostGL = function () {
+            var reportProgress = function (content) {
+                console.log('Progress: ' + content);
+            };
+            var materialsLoaded = function (materials) {
+                var count = Validator.isValid(materials) ? materials.length : 0;
+                console.log('Loaded #' + count + ' materials.');
+            };
+            var meshLoaded = function (name, bufferGeometry, material) {
+                console.log('Loaded mesh: ' + name + ' Material name: ' + material.name);
+            };
+            var completedLoading = function () {
+                console.log('Loading complete!');
+            };
+
+            this.wwObjLoader2.registerCallbackProgress(reportProgress);
+            this.wwObjLoader2.registerCallbackCompletedLoading(completedLoading);
+            this.wwObjLoader2.registerCallbackMaterialsLoaded(materialsLoaded);
+            this.wwObjLoader2.registerCallbackMeshLoaded(meshLoaded);
+
+            return true;
+        };
+
+        WWOBJLoader2Example.prototype.loadFiles = function (prepData) {
+            prepData.setSceneGraphBaseNode(this.pivot);
+            prepData.setStreamMeshes(this.streamMeshes);
+            this.wwObjLoader2.prepareRun(prepData);
+            this.wwObjLoader2.run();
+        };
+
+        WWOBJLoader2Example.prototype._handleFileSelect = function (event, pathTexture) {
+            var fileObj = null;
+            var fileMtl = null;
+            var files = event.target.files;
+
+            for (var i = 0, file; file = files[i]; i++) {
+
+                if (file.name.indexOf('\.obj') > 0 && fileObj === null) {
+                    fileObj = file;
+                }
+
+                if (file.name.indexOf('\.mtl') > 0 && fileMtl === null) {
+                    fileMtl = file;
+                }
+
+            }
+
+            if (!Validator.isValid(fileObj)) {
+                alert('Unable to load OBJ file from given files.');
+            }
+
+            var fileReader = new FileReader();
+            fileReader.onload = function (fileDataObj) {
+
+                var uint8Array = new Uint8Array(fileDataObj.target.result);
+                if (fileMtl === null) {
+
+                    app.loadFilesUser({
+                        name: 'userObj',
+                        objAsArrayBuffer: uint8Array,
+                        pathTexture: pathTexture,
+                        mtlAsString: null
+                    })
+
+                } else {
+
+                    fileReader.onload = function (fileDataMtl) {
+
+                        app.loadFilesUser({
+                            name: 'userObj',
+                            objAsArrayBuffer: uint8Array,
+                            pathTexture: pathTexture,
+                            mtlAsString: fileDataMtl.target.result
+                        })
+                    };
+                    fileReader.readAsText(fileMtl);
+
+                }
+
+            };
+            fileReader.readAsArrayBuffer(fileObj);
+
+        };
+
+        WWOBJLoader2Example.prototype.loadFilesUser = function (objDef) {
+            var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataArrayBuffer(
+                objDef.name, objDef.objAsArrayBuffer, objDef.pathTexture, objDef.mtlAsString
+            );
+            prepData.setSceneGraphBaseNode(this.pivot);
+            prepData.setStreamMeshes(this.streamMeshes);
+            this.wwObjLoader2.prepareRun(prepData);
+            this.wwObjLoader2.run();
+        };
+
+        WWOBJLoader2Example.prototype.resizeDisplayGL = function () {
+
+            this.recalcAspectRatio();
+            this.renderer.setSize(this.canvas.offsetWidth, this.canvas.offsetHeight, false);
+
+            this.updateCamera();
+        };
+
+        WWOBJLoader2Example.prototype.recalcAspectRatio = function () {
+            this.aspectRatio = (this.canvas.offsetHeight === 0) ? 1 : this.canvas.offsetWidth / this.canvas.offsetHeight;
+        };
+
+        WWOBJLoader2Example.prototype.resetCamera = function () {
+            this.camera.position.copy(this.cameraDefaults.posCamera);
+            this.cameraTarget.copy(this.cameraDefaults.posCameraTarget);
+
+            this.updateCamera();
+        };
+
+        WWOBJLoader2Example.prototype.updateCamera = function () {
+            this.camera.aspect = this.aspectRatio;
+            this.camera.lookAt(this.cameraTarget);
+            this.camera.updateProjectionMatrix();
+        };
+
+        WWOBJLoader2Example.prototype.render = function () {
+            if (!this.renderer.autoClear) this.renderer.clear();
+
+            this.controls.update();
+            this.renderer.render(this.scene, this.camera);
+        };
+
+        WWOBJLoader2Example.prototype.alterSmoothShading = function () {
+
+            var scope = this;
+            scope.smoothShading = !scope.smoothShading;
+            console.log(scope.smoothShading ? 'Enabling SmoothShading' : 'Enabling FlatShading');
+
+            scope.traversalFunction = function (material) {
+                material.shading = scope.smoothShading ? THREE.SmoothShading : THREE.FlatShading;
+                material.needsUpdate = true;
+            };
+            var scopeTraverse = function (object3d) {
+                scope.traverseScene(object3d);
+            };
+            scope.pivot.traverse(scopeTraverse);
+        };
+
+        WWOBJLoader2Example.prototype.alterDouble = function () {
+
+            var scope = this;
+            scope.doubleSide = !scope.doubleSide;
+            console.log(scope.doubleSide ? 'Enabling DoubleSide materials' : 'Enabling FrontSide materials');
+
+            scope.traversalFunction = function (material) {
+                material.side = scope.doubleSide ? THREE.DoubleSide : THREE.FrontSide;
+            };
+
+            var scopeTraverse = function (object3d) {
+                scope.traverseScene(object3d);
+            };
+            scope.pivot.traverse(scopeTraverse);
+        };
+
+        WWOBJLoader2Example.prototype.traverseScene = function (object3d) {
+
+            if (object3d.material instanceof THREE.MultiMaterial) {
+
+                var materials = object3d.material.materials;
+                for (var name in materials) {
+
+                    if (materials.hasOwnProperty(name)) {
+                        this.traversalFunction(materials[name]);
+
+                    }
+
+                }
+
+            } else if (object3d.material) {
+
+                this.traversalFunction(object3d.material);
+
+            }
+
+        };
+
+        WWOBJLoader2Example.prototype.clearAllAssests = function () {
+            var scope = this;
+            var remover = function (object3d) {
+
+                if (object3d === scope.pivot) {
+                    return;
+                }
+                console.log('Removing: ' + object3d.name);
+                scope.scene.remove(object3d);
+
+                if (object3d.hasOwnProperty('geometry')) {
+                    object3d.geometry.dispose();
+                }
+                if (object3d.hasOwnProperty('material')) {
+
+                    var mat = object3d.material;
+                    if (mat.hasOwnProperty('materials')) {
+
+                        var materials = mat.materials;
+                        for (var name in materials) {
+
+                            if (materials.hasOwnProperty(name)) materials[name].dispose();
+
+                        }
+                    }
+                }
+                if (object3d.hasOwnProperty('texture')) {
+                    object3d.texture.dispose();
+                }
+            };
+
+            scope.scene.remove(scope.pivot);
+            scope.pivot.traverse(remover);
+            scope.createPivot();
+        };
+
+        return WWOBJLoader2Example;
+
+    })();
+
+    var app = new WWOBJLoader2Example(document.getElementById('example'));
+
+    // Init dat.gui and controls
+    var WWOBJLoader2Control = function () {
+        this.smoothShading = app.smoothShading;
+        this.doubleSide = app.doubleSide;
+        this.streamMeshes = app.streamMeshes;
+    };
+    var wwObjLoader2Control = new WWOBJLoader2Control();
+
+    var gui = new dat.GUI({
+        autoPlace: false,
+        width: 100
+    });
+
+
+    var menuDiv = document.getElementById('dat');
+    menuDiv.appendChild(gui.domElement);
+    var folderOptions = gui.addFolder('消防车');
+
+    // init three.js example application
+    var resizeWindow = function () {
+        app.resizeDisplayGL();
+    };
+
+    var render = function () {
+        requestAnimationFrame(render);
+        app.render();
+    };
+
+    console.log('Starting initialisation phase...');
+    app.initGL();
+    app.resizeDisplayGL();
+    app.initPostGL();
+
+    var prepData = new THREE.OBJLoader2.WWOBJLoader2.PrepDataFile(
+        '1',
+        '',
+        '1.obj',
+        '',
+        '1.mtl'
+    );
+    app.loadFiles(prepData);
+
+    //******************************************************************************************
+
+    var modelOBJ = app.scene.getObjectByName('Pivot');
+    modelOBJ.position.y = 50;
+    modelOBJ.position.x = -0;
+    modelOBJ.position.z = -0;
+
+    var parent = new THREE.Object3D();
+    parent.add(modelOBJ);
+    parent.position.y = -100;
+    parent.position.x = 0;
+    parent.position.z = 0;
+    app.scene.add(parent);
+
+    var parentControl = {
+        isRotation: true
+    };
+
+    var controlSmooth1 = folderOptions.add(app.controls, 'autoRotate').name('旋转');
+    controlSmooth1.onChange(function (value) {
+
+        app.controls.autoRotate = value;
+
+    });
+    animation();
+
+    folderOptions.open();
+
+    // 自转
+    function animation()
+    {
+        if (parentControl.isRotation) {
+            requestAnimationFrame(animation);
+            parent.rotation.y += 0.02;
+            app.render();
+        }
+    }
+
+    render();
+
+    function onWindowResize() {
+        app.camera.aspect = window.innerWidth / window.innerHeight;
+        app.camera.updateProjectionMatrix();
+        render();
+        app.renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    window.onresize = onWindowResize;
+
+    render();
+
+</script>

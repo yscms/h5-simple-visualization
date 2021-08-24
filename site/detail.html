@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+    <title>作战首页</title>
+
+    <!--  引入百度地图  -->
+    <script src="http://api.map.baidu.com/api?v=2.0&ak=kyuRcpDLU5HuYmFmkRXGGOxeQ6zVo7KK" type="text/javascript"></script>
+
+    <!--  加载鼠标绘制工具  -->
+    <script src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js" type="text/javascript"></script>
+    <link href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" rel="stylesheet"/>
+
+    <!--  加载检索信息窗口  -->
+    <script src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js" type="text/javascript"></script>
+    <link href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" rel="stylesheet"/>
+
+    <!--  引入echarts  -->
+    <script src="../libs/js/echarts.js" type="text/javascript"></script>
+</head>
+<style type="text/css">
+    html, body {
+        overflow: hidden;
+        height: 100%;
+        background: linear-gradient(#104BAA, #000000);
+        margin: 0;
+        padding: 0;
+    }
+    p, ul, li {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+    a {
+        text-decoration: none;
+        outline: none;
+    }
+    .back {
+        width: 98%;
+        height: 700px;
+        margin-left: 1%;
+        margin-top: 130px;
+        position: relative;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0 0 15px 1px #20558b;
+    }
+    .back .tit {
+        width: 100%;
+        height: 50px;
+        font-size: 25px;
+        text-align: center;
+        font-family: Arial, 华文新魏;
+        font-weight: bold;
+        line-height: 50px;
+        color: #00FFCC;
+        border-bottom: 1px solid #0099ff;
+    }
+    .back .tit .tit_left {
+        width: 61%;
+        height: 50px;
+        float: left;
+        position: relative;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0 0 15px 1px #20558b;
+        margin-left: 2%;
+    }
+    .back .tit .tit_right {
+        width: 30%;
+        height: 50px;
+        float: left;
+        padding-left: 3%;
+        position: relative;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0 0 15px 1px #20558b;
+        margin-left: 1%;
+    }
+    .back_map {
+        width: 96%;
+        height: 300px;
+        margin-top: 5px;
+        margin-left: 2%;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0 0 15px 1px #20558b;
+        position: relative;
+    }
+    .back_echart .echart {
+        width: 96%;
+        height: 330px;
+        margin-top: 10px;
+        margin-left: 2%;
+    }
+    .back_echart {
+        width: 96%;
+        height: 330px;
+        margin-left: 2%;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0 0 15px 1px #20558b;
+        position: relative;
+    }
+    .back .back_map .map {
+        width: 96%;
+        height: 300px;
+    }
+    .title {
+        width: 80%;
+        height: 80px;
+        font-size: 50px;
+        text-align: center;
+        font-family: Arial, 华文新魏;
+        font-weight: bold;
+        color: #00FFCC;
+        background-color: #0099ff;
+        margin-top: 30px;
+        line-height: 80px;;
+        float: left;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0 0 15px 1px #20558b;
+        position: relative;
+    }
+    .ret {
+        width: 9%;
+        height: 80px;
+        margin-top: 30px;
+        float: left;
+    }
+    .ret img {
+        width: 50px;
+        height: 50px;
+        margin-top: 15px;
+        margin-left: 20px;
+    }
+    .home {
+        width: 9%;
+        height: 80px;
+        margin-top: 30px;
+        float: left;
+    }
+    .home img {
+        width: 50px;
+        height: 50px;
+        margin-top: 15px;
+        margin-left: 20px;
+    }
+    .info_left {
+        width: 47%;
+        height: 500px;
+        float: left;
+        margin-left: 2%;
+        margin-top: 20px;
+        position: relative;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0 0 15px 1px #20558b;
+    }
+    .info_left .info_content {
+        width: 90%;
+        height: 110px;
+        position: relative;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0 0 15px 1px #20558b;
+        margin-left: 5%;
+        margin-top: 15px;
+    }
+    .info_left .info_content .controller {
+        width: 80%;
+        height: 70px;
+        position: relative;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0 0 15px 1px #20558b;
+        margin-top: 20px;
+        margin-left: 10%;
+        font-size: 35px;
+        font-family: Arial, 华文新魏;
+        font-weight: bold;
+        color: #00FFCC;
+        border-radius: 50px;
+        line-height: 65px;
+    }
+    .info_left .info_content .controller .img {
+        width: 20%;
+        height: 70px;
+        float: left;
+        padding-left: 18%;
+    }
+    .info_left .info_content .controller .img img {
+        width: 50px;
+        height: 50px;
+        margin-top: 10px;
+
+    }
+    .info_left .info_content .controller .word {
+        width: 60%;
+        height: 70px;
+        float: left;
+    }
+    .info_left .info_top {
+        width: 90%;
+        height: 340px;
+        line-height: 60px;
+        margin-left: 5%;
+        margin-top: 20px;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0px 0px 15px 1px #20558b;
+        position: relative;
+    }
+    .info_left .battle {
+        width: 80%;
+        height: 60px;
+        font-size: 30px;
+        text-align: center;
+        font-family: Arial, 华文新魏;
+        font-weight: bold;
+        color: #00FFCC;
+        margin-top: 20px;
+        margin-left: 10%;
+        border-radius: 50px;
+        line-height: 60px;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0px 0px 15px 1px #20558b;
+    }
+    .info_left .echart_2 {
+        width: 90%;
+        height: 300px;
+        margin-left: 5%;
+        margin-top: 20px;
+    }
+    .info_left .pos {
+        width: 70%;
+        height: 30px;
+        top: 120px;
+        left: 10px;
+        margin-left: 25%;
+        position: absolute;
+    }
+    .info_left .pos .li_top {
+        width: 20px;
+        height: 20px;
+        border-radius: 50px;
+        background-color: #00FF66;
+        float: left;
+    }
+    .info_left .pos .li_bottom {
+        width: 35%;
+        height: 20px;
+        font-family: Arial, 华文新魏;
+        font-weight: bold;
+        color: #00FF66;
+        line-height: 20px;
+        font-size: 20px;
+        margin-left: 10px;
+        float: left;
+    }
+    .info_right {
+        width: 47%;
+        height: 500px;
+        float: left;
+        margin-left: 2%;
+        margin-top: 20px;
+        position: relative;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0 0 15px 1px #20558b;
+    }
+    .info_right .vehicle {
+        width: 70%;
+        height: 60px;
+        font-size: 30px;
+        text-align: center;
+        font-family: Arial, 华文新魏;
+        font-weight: bold;
+        color: #00FFCC;
+        margin-top: 30px;
+        margin-left: 15%;
+        border-radius: 50px;
+        line-height: 60px;
+        background-color: rgba(0, 24, 106, 0.5);
+        border: 1px solid #20558b;
+        box-shadow: 0 0 15px 1px #20558b;
+    }
+    .info_right .echart_1 {
+        width: 90%;
+        height: 400px;
+        margin-left: 5%;
+        margin-top: 20px;
+    }
+    .clear {
+        clear: both;
+    }
+    .bj-1 {
+        position: absolute;
+        left: -1px;
+        top: -1px;
+    }
+    .bj-2 {
+        position: absolute;
+        right: -1px;
+        top: -1px;
+    }
+    .bj-3 {
+        position: absolute;
+        right: -1px;
+        bottom: -1px;
+    }
+    .bj-4 {
+        position: absolute;
+        left: -1px;
+        bottom: -1px;
+    }
+</style>
+<body>
+<div class="ret">
+    <a href="index.html">
+        <img src="../libs/img/z_2.png"/>
+    </a>
+</div>
+<div class="title">
+    智慧安全消防信息可视化系统
+    <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+    <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+    <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+    <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+</div>
+<div class="home">
+    <a href="index.html">
+        <img src="../libs/img/f_3.png"/>
+    </a>
+</div>
+<div class="back">
+    <div class="tit">
+        <div class="tit_left">
+            琅琊区火灾状况监控
+            <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+            <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+            <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+            <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+        </div>
+        <div class="tit_right">
+            <marquee behavior="alternate"
+                     style="font-size: 25px;font-weight:bold;color: #FF00FF;font-family: '华文新魏';width: 100%;">
+                山水人家某建筑发生火灾，请立即前往
+            </marquee>
+            <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+            <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+            <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+            <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+        </div>
+    </div>
+    <div class="back_map">
+        <div class="map" id="map" style="width: 100%;height: 300px;">
+        </div>
+        <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+        <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+        <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+        <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+    </div>
+    <div class="back_echart">
+        <div class="echart" id="echart">
+        </div>
+        <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+        <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+        <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+        <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+    </div>
+    <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+    <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+    <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+    <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+</div>
+<div class="info_left">
+    <div class="info_content">
+        <a href="./battle.html">
+            <div class="controller">
+                <div class="img">
+                    <img src="../libs/img/kai.png">
+                </div>
+                <div class="word">
+                    作战中心
+                </div>
+            </div>
+        </a>
+        <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+        <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+        <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+        <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+    </div>
+    <div class="info_top">
+        <p class="battle">
+            出警信息
+        </p>
+        <div class="echart_2" id="echart_2">
+        </div>
+        <div class="pos">
+            <ul>
+                <li class="li_top" style="background-color: #00FFCC;">
+                </li>
+                <li class="li_bottom" style="color: #00FFCC;">
+                    未出警
+                </li>
+                <li class="li_top">
+                </li>
+                <li class="li_bottom">
+                    出警
+                </li>
+            </ul>
+        </div>
+        <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+        <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+        <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+        <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+    </div>
+    <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+    <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+    <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+    <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+</div>
+<div class="info_right">
+    <p class="vehicle">
+        消防车辆信息
+    </p>
+    <div class="echart_1" id="echart_1">
+    </div>
+    <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+    <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+    <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+    <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+</div>
+<div class="clear">
+</div>
+</body>
+<script type="text/javascript">
+
+    let myChart = echarts.init(document.getElementById('echart'));
+
+    let option = {
+        title: {
+            text: '- 琅琊区七天内火灾情况 -',
+            left: 'center',
+            textStyle: {
+                color: '#00FFCC',
+                fontFamily: '华文新魏',
+                fontWeight: 'bold',
+                fontSize: '25'
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: ['3月1', '3月2', '3月3', '3月4', '3月5', '3月6', '3月7'],
+            axisLabel: {
+                textStyle: {
+                    color: '#00FFCC',
+                    fontSize: '18',
+                    fontFamily: '华文新魏',
+                    fontWeight: 'bold',
+                }
+            }
+        },
+        yAxis: {
+            type: 'value',
+            splitLine: {show: false},
+            axisTick: {show: false},
+            axisLine: {show: false},
+            axisLabel: {
+                textStyle: {
+                    color: '#00FFCC',
+                    fontSize: '15',
+                    fontFamily: '华文新魏',
+                    fontWeight: 'bold',
+                }
+            }
+        },
+        color: ['#ffffff'],
+        series: [{
+            data: [2, 1, 0, 0, 0, 1, 0],
+            type: 'line',
+            areaStyle: {
+                color: '#97FFFF'
+            },
+            label: {
+                show: 'true',
+                color: '#00FFCC',
+                fontSize: '15',
+                fontFamily: '华文新魏',
+                fontWeight: 'bold',
+            },
+            lineStyle: {
+                width: '3'
+            }
+        }]
+    };
+
+    myChart.setOption(option);
+
+    let myChart_1 = echarts.init(document.getElementById('echart_1'));
+
+    let option_1 = {
+        title: {
+            text: '车辆类别分类（共18辆）',
+            left: 'center',
+            top: 20,
+            textStyle: {
+                color: '#CC00FF',
+                fontFamily: '华文新魏',
+                fontWeight: 'bold',
+                fontSize: '25'
+            }
+        },
+
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+
+        visualMap: {
+            show: false,
+            min: 80,
+            max: 600,
+            inRange: {
+                colorLightness: [0, 1]
+            }
+        },
+        series: [
+            {
+                name: '访问来源',
+                type: 'pie',
+                radius: '55%',
+                center: ['50%', '50%'],
+                data: [
+                    {value: 8, name: '水罐泡沫消防车'},
+                    {value: 5, name: '举高消防救援车'},
+                    {value: 2, name: '供水消防车'},
+                    {value: 2, name: '干粉泡沫消防车'},
+                    {value: 1, name: '照明消防车'}
+                ].sort(function (a, b) {
+                    return a.value - b.value;
+                }),
+                roseType: 'radius',
+                label: {
+                    normal: {
+                        textStyle: {
+                            color: 'rgba(255, 255, 255, 1)'
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        },
+                        smooth: 0.2,
+                        length: 10,
+                        length2: 20
+                    }
+                },
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    },
+                    color: {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 1,
+                        colorStops: [{
+                            offset: 0, color: '#CC00FF' // 0% 处的颜色
+                        }, {
+                            offset: 1, color: '#ffffff' // 100% 处的颜色
+                        }],
+                        global: false // 缺省为 false
+                    },
+                    borderColor: '#00FF66',
+                    borderWidth: '3'
+                },
+                label: {
+                    color: '#CC00FF',
+                    fontFamily: '华文新魏',
+                    fontWeight: 'bold',
+                    fontSize: '20'
+                },
+
+                animationType: 'scale',
+                animationEasing: 'elasticOut',
+                animationDelay: function (idx) {
+                    return Math.random() * 200;
+                }
+            }
+        ]
+    };
+
+    myChart_1.setOption(option_1);
+
+    let myChart_2 = echarts.init(document.getElementById('echart_2'));
+
+    let weatherIcons = {
+        'Sunny': '../libs/img/p.gif',
+        'Cloudy': '../libs/img/v_1.gif',
+    };
+
+    let seriesLabel = {
+        normal: {
+            show: true,
+            color: '#104BAA',
+            fontSize: '20',
+            fontFamily: '华文新魏',
+            fontWeight: 'bold',
+            textBorderWidth: 2
+        }
+    }
+
+    let option_2 = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            left: 100
+        },
+        xAxis: {
+            type: 'value',
+            name: 'Days',
+            show: false,
+            axisLabel: {
+                formatter: '{value}',
+                textStyle: {
+                    color: '#000000'
+                }
+            },
+            textStyle: {
+                color: '#000000'
+            }
+        },
+        yAxis: {
+            type: 'category',
+            inverse: true,
+            data: ['p', 'v'],
+            axisLabel: {
+                formatter: function (value) {
+                    if (value == 'p') {
+                        return '{' + value + '| }\n消防员（人）';
+                    } else {
+                        return '{' + value + '| }\n消防车（辆）';
+                    }
+
+                },
+                textStyle: {
+                    color: '#00FFCC',
+                    fontSize: '13',
+                    fontFamily: '华文新魏',
+                    fontWeight: 'bold',
+                },
+                margin: 20,
+                rich: {
+                    value: {
+                        color: '#00FFCC',
+                        fontSize: '23',
+                        fontFamily: '华文新魏',
+                        fontWeight: 'bold',
+                        lineHeight: 30,
+                        align: 'center'
+                    },
+                    p: {
+                        height: 40,
+                        align: 'center',
+                        backgroundColor: {
+                            image: weatherIcons.Sunny
+                        }
+                    },
+                    v: {
+                        height: 40,
+                        fontSize: '20',
+                        align: 'center',
+                        backgroundColor: {
+                            image: weatherIcons.Cloudy
+                        }
+                    }
+                }
+            }
+        },
+        series: [
+            {
+                name: '未出警',
+                type: 'bar',
+                data: [
+                    {
+
+                        value: 70,
+                        itemStyle: {
+                            normal: {color: '#00FFCC'}
+                        }
+                    },
+                    {
+                        value: 6,
+                        itemStyle: {
+                            normal: {color: '#00FFCC'}
+                        }
+                    }
+                ],
+                label: seriesLabel,
+                markPoint: {
+                    symbolSize: 1,
+                    symbolOffset: [0, '50%'],
+                    label: {
+                        normal: {
+                            formatter: '{a|{a}\n}{出警|{b} }{未出警|{c}}',
+                            borderColor: '#000000',
+                            borderWidth: 1,
+                            borderRadius: 4,
+                            padding: [4, 10],
+                            lineHeight: 26,
+                            position: 'right',
+                            distance: 20,
+                            rich: {
+                                a: {
+                                    align: 'center',
+                                    color: '#104BAA',
+                                    fontSize: 18,
+                                    textShadowBlur: 2,
+                                    textShadowColor: '#000000',
+                                    textShadowOffsetX: 0,
+                                    textShadowOffsetY: 1,
+                                    textBorderColor: '#000000',
+                                    textBorderWidth: 2
+                                },
+                                b: {
+                                    color: '#000000'
+                                }
+                            }
+                        }
+                    }
+                }
+
+            },
+            {
+                name: '出警',
+                type: 'bar',
+                label: seriesLabel,
+                data: [
+                    {
+                        value: 50,
+                        itemStyle: {
+                            normal: {color: '#00FF66'},
+                            color: '#000000'
+                        }
+                    },
+                    {
+                        value: 12,
+                        itemStyle: {
+                            normal: {color: '#00FF66'}
+                        }
+                    }
+                ]
+            }
+        ]
+    };
+
+    myChart_2.setOption(option_2);
+
+    // 创建和初始化地图函数：
+    function initMap() {
+        createMap();     // 创建地图
+        setMapEvent();   // 设置地图事件
+        addMapControl(); // 向地图添加控件
+        addMapOverlay(); // 向地图添加覆盖物
+        style_ditu();    // 地图个性化模板
+    }
+
+    function createMap() {
+        map = new BMap.Map("map");
+        map.centerAndZoom(new BMap.Point(118.317139, 32.277448), 14);
+        map.addControl(new BMap.MapTypeControl({
+            mapTypes: [
+                BMAP_NORMAL_MAP,
+                BMAP_HYBRID_MAP
+            ]
+        }));
+        map.setCurrentCity("滁州"); // 设置地图显示的城市 此项是必须设置的
+        map.enableScrollWheelZoom(true);
+
+        // 添加城市列表
+        map.enableInertialDragging();
+        map.enableContinuousZoom();
+        let size = new BMap.Size(10, 10);
+        map.addControl(new BMap.CityListControl({
+            anchor: BMAP_ANCHOR_TOP_LEFT,
+            offset: size,
+        }));
+    }
+
+    // 添加地图类型和缩略图
+    function add_control() {
+        map.addControl(mapType1);      // 2D图，卫星图
+        map.addControl(mapType2);      // 左上角，默认地图控件
+        map.addControl(overView);      // 添加默认缩略地图控件
+        map.addControl(overViewOpen);  // 右下角，打开
+    }
+
+    function setMapEvent() {
+        map.enableScrollWheelZoom();
+        map.enableKeyboard();
+        map.enableDragging();
+        map.enableDoubleClickZoom()
+    }
+
+    function addClickHandler(target, window) {
+        target.addEventListener("click", function () {
+        });
+    }
+
+    function addMapOverlay() {
+        let data_info = [[118.317139, 32.277448, "滁州市琅琊区山水人家"]
+        ];
+        let opts = {
+            width: 250,           // 信息窗口宽度
+            height: 80,           // 信息窗口高度
+            title: "着火建筑",     // 信息窗口标题
+            enableMessage: true   // 设置允许信息窗发送短息
+        };
+
+        for (let i = 0; i < data_info.length; i++) {
+            let myIcon = new BMap.Icon("../libs/img/h_6.png", new BMap.Size(80, 80), {
+                offset: new BMap.Size(10, 25) // 设置图片偏移
+            });
+            let marker = new BMap.Marker(new BMap.Point(data_info[i][0], data_info[i][1]), {icon: myIcon});  // 创建标注
+            marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+            let content = data_info[i][2];
+            map.addOverlay(marker); // 将标注添加到地图中
+            addClickHandler(content, marker);
+            marker.addEventListener('dbclick', function () {
+                window.location.href = './battle.html';
+            });
+        }
+
+        function addClickHandler(content, marker) {
+            marker.addEventListener("click", function (e) {
+                    openInfo(content, e)
+                }
+            );
+        }
+
+        function openInfo(content, e) {
+            let p = e.target;
+            let point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+            let infoWindow = new BMap.InfoWindow(content, opts);  // 创建信息窗口对象
+            map.openInfoWindow(infoWindow, point); //开启信息窗口
+        }
+    }
+
+    // 向地图添加控件
+    function addMapControl() {
+        let navControl = new BMap.NavigationControl({
+            anchor: BMAP_ANCHOR_BOTTOM_RIGHT,
+            type: BMAP_NAVIGATION_CONTROL_LARGE
+        });
+        map.addControl(navControl);
+    }
+
+    // 个性化地图
+    function style_ditu() {
+        let myStyleJson = [
+            {
+                "featureType": "road",
+                "elementType": "geometry.stroke",
+                "stylers": {
+                    "color": "#ff0000"
+                }
+            }];
+        map.setMapStyle({styleJson: myStyleJson});
+
+        map.setMapStyle({
+            styleJson: [
+                {
+                    "featureType": "land",
+                    "elementType": "geometry",
+                    "stylers": {
+                        "visibility": "on",
+                        "color": "#091220ff"
+                    }
+                }, {
+                    "featureType": "water",
+                    "elementType": "geometry",
+                    "stylers": {
+                        "visibility": "on",
+                        "color": "#113549ff"
+                    }
+                }, {
+                    "featureType": "green",
+                    "elementType": "geometry",
+                    "stylers": {
+                        "visibility": "on",
+                        "color": "#0e1b30ff"
+                    }
+                }, {
+                    "featureType": "building",
+                    "elementType": "geometry",
+                    "stylers": {
+                        "visibility": "on"
+                    }
+                }, {
+                    "featureType": "building",
+                    "elementType": "geometry.fill",
+                    "stylers": {
+                        "color": "#ffffffb3"
+                    }
+                }, {
+                    "featureType": "building",
+                    "elementType": "geometry.stroke",
+                    "stylers": {
+                        "color": "#dadadab3"
+                    }
+                }, {
+                    "featureType": "subwaystation",
+                    "elementType": "geometry",
+                    "stylers": {
+                        "visibility": "on",
+                        "color": "#b15454B2"
+                    }
+                }, {
+                    "featureType": "education",
+                    "elementType": "geometry",
+                    "stylers": {
+                        "visibility": "on",
+                        "color": "#e4f1f1ff"
+                    }
+                }, {
+                    "featureType": "medical",
+                    "elementType": "geometry",
+                    "stylers": {
+                        "visibility": "on",
+                        "color": "#f0dedeff"
+                    }
+                }, {
+                    "featureType": "scenicspots",
+                    "elementType": "geometry",
+                    "stylers": {
+                        "visibility": "on",
+                        "color": "#e2efe5ff"
+                    }
+                }, {
+                    "featureType": "highway",
+                    "elementType": "geometry",
+                    "stylers": {
+                        "visibility": "on",
+                        "weight": 4
+                    }
+                }, {
+                    "featureType": "highway",
+                    "elementType": "geometry.fill",
+                    "stylers": {
+                        "color": "#f7c54dff"
+                    }
+                }, {
+                    "featureType": "highway",
+                    "elementType": "geometry.stroke",
+                    "stylers": {
+                        "color": "#fed669ff"
+                    }
+                }, {
+                    "featureType": "highway",
+                    "elementType": "labels",
+                    "stylers": {
+                        "visibility": "on"
+                    }
+                }, {
+                    "featureType": "highway",
+                    "elementType": "labels.text.fill",
+                    "stylers": {
+                        "color": "#8f5a33ff"
+                    }
+                }, {
+                    "featureType": "highway",
+                    "elementType": "labels.text.stroke",
+                    "stylers": {
+                        "color": "#ffffffff"
+                    }
+                }, {
+                    "featureType": "highway",
+                    "elementType": "labels.icon",
+                    "stylers": {
+                        "visibility": "on"
+                    }
+                }, {
+                    "featureType": "arterial",
+                    "elementType": "geometry",
+                    "stylers": {
+                        "visibility": "on",
+                        "weight": 2
+                    }
+                }, {
+                    "featureType": "arterial",
+                    "elementType": "geometry.fill",
+                    "stylers": {
+                        "color": "#d8d8d8ff"
+                    }
+                }, {
+                    "featureType": "arterial",
+                    "elementType": "geometry.stroke",
+                    "stylers": {
+                        "color": "#ffeebbff"
+                    }
+                }, {
+                    "featureType": "arterial",
+                    "elementType": "labels",
+                    "stylers": {
+                        "visibility": "on"
+                    }
+                }, {
+                    "featureType": "arterial",
+                    "elementType": "labels.text.fill",
+                    "stylers": {
+                        "color": "#525355ff"
+                    }
+                }, {
+                    "featureType": "arterial",
+                    "elementType": "labels.text.stroke",
+                    "stylers": {
+                        "color": "#ffffffff"
+                    }
+                }, {
+                    "featureType": "local",
+                    "elementType": "geometry",
+                    "stylers": {
+                        "visibility": "on",
+                        "weight": 1
+                    }
+                }, {
+                    "featureType": "local",
+                    "elementType": "geometry.fill",
+                    "stylers": {
+                        "color": "#d8d8d8ff"
+                    }
+                }, {
+                    "featureType": "local",
+                    "elementType": "geometry.stroke",
+                    "stylers": {
+                        "color": "#ffffffff"
+                    }
+                }, {
+                    "featureType": "local",
+                    "elementType": "labels",
+                    "stylers": {
+                        "visibility": "on"
+                    }
+                }, {
+                    "featureType": "local",
+                    "elementType": "labels.text.fill",
+                    "stylers": {
+                        "color": "#979c9aff"
+                    }
+                }, {
+                    "featureType": "local",
+                    "elementType": "labels.text.stroke",
+                    "stylers": {
+                        "color": "#ffffffff"
+                    }
+                }, {
+                    "featureType": "railway",
+                    "elementType": "geometry",
+                    "stylers": {
+                        "visibility": "on",
+                        "weight": 1
+                    }
+                }, {
+                    "featureType": "railway",
+                    "elementType": "geometry.fill",
+                    "stylers": {
+                        "color": "#123c52ff"
+                    }
+                }, {
+                    "featureType": "railway",
+                    "elementType": "geometry.stroke",
+                    "stylers": {
+                        "color": "#12223dff"
+                    }
+                }, {
+                    "featureType": "subway",
+                    "elementType": "geometry",
+                    "stylers": {
+                        "visibility": "on",
+                        "weight": 1
+                    }
+                }, {
+                    "featureType": "subway",
+                    "elementType": "geometry.fill",
+                    "stylers": {
+                        "color": "#d8d8d8ff"
+                    }
+                }, {
+                    "featureType": "subway",
+                    "elementType": "geometry.stroke",
+                    "stylers": {
+                        "color": "#ffffff00"
+                    }
+                }, {
+                    "featureType": "subway",
+                    "elementType": "labels",
+                    "stylers": {
+                        "visibility": "on"
+                    }
+                }, {
+                    "featureType": "subway",
+                    "elementType": "labels.text.fill",
+                    "stylers": {
+                        "color": "#979c9aff"
+                    }
+                }, {
+                    "featureType": "subway",
+                    "elementType": "labels.text.stroke",
+                    "stylers": {
+                        "color": "#ffffffff"
+                    }
+                }, {
+                    "featureType": "continent",
+                    "elementType": "labels",
+                    "stylers": {
+                        "visibility": "on"
+                    }
+                }, {
+                    "featureType": "continent",
+                    "elementType": "labels.icon",
+                    "stylers": {
+                        "visibility": "on"
+                    }
+                }, {
+                    "featureType": "continent",
+                    "elementType": "labels.text.fill",
+                    "stylers": {
+                        "color": "#333333ff"
+                    }
+                }, {
+                    "featureType": "continent",
+                    "elementType": "labels.text.stroke",
+                    "stylers": {
+                        "color": "#ffffffff"
+                    }
+                }, {
+                    "featureType": "city",
+                    "elementType": "labels.icon",
+                    "stylers": {
+                        "visibility": "on"
+                    }
+                }, {
+                    "featureType": "city",
+                    "elementType": "labels",
+                    "stylers": {
+                        "visibility": "on"
+                    }
+                }, {
+                    "featureType": "city",
+                    "elementType": "labels.text.fill",
+                    "stylers": {
+                        "color": "#454d50ff"
+                    }
+                }, {
+                    "featureType": "city",
+                    "elementType": "labels.text.stroke",
+                    "stylers": {
+                        "color": "#ffffffff"
+                    }
+                }, {
+                    "featureType": "town",
+                    "elementType": "labels.icon",
+                    "stylers": {
+                        "visibility": "on"
+                    }
+                }, {
+                    "featureType": "town",
+                    "elementType": "labels",
+                    "stylers": {
+                        "visibility": "on"
+                    }
+                }, {
+                    "featureType": "town",
+                    "elementType": "labels.text.fill",
+                    "stylers": {
+                        "color": "#454d50ff"
+                    }
+                }, {
+                    "featureType": "town",
+                    "elementType": "labels.text.stroke",
+                    "stylers": {
+                        "color": "#ffffffff"
+                    }
+                }, {
+                    "featureType": "road",
+                    "elementType": "geometry.fill",
+                    "stylers": {
+                        "color": "#12223dff"
+                    }
+                }, {
+                    "featureType": "poilabel",
+                    "elementType": "labels",
+                    "stylers": {
+                        "visibility": "on"
+                    }
+                }, {
+                    "featureType": "districtlabel",
+                    "elementType": "labels",
+                    "stylers": {
+                        "visibility": "off"
+                    }
+                }, {
+                    "featureType": "road",
+                    "elementType": "geometry",
+                    "stylers": {
+                        "visibility": "on"
+                    }
+                }, {
+                    "featureType": "road",
+                    "elementType": "labels",
+                    "stylers": {
+                        "visibility": "off"
+                    }
+                }, {
+                    "featureType": "road",
+                    "elementType": "geometry.stroke",
+                    "stylers": {
+                        "color": "#ffffff00"
+                    }
+                }, {
+                    "featureType": "district",
+                    "elementType": "labels",
+                    "stylers": {
+                        "visibility": "off"
+                    }
+                }, {
+                    "featureType": "poilabel",
+                    "elementType": "labels.icon",
+                    "stylers": {
+                        "visibility": "off"
+                    }
+                }, {
+                    "featureType": "poilabel",
+                    "elementType": "labels.text.fill",
+                    "stylers": {
+                        "color": "#2dc4bbff"
+                    }
+                }, {
+                    "featureType": "poilabel",
+                    "elementType": "labels.text.stroke",
+                    "stylers": {
+                        "color": "#ffffff00"
+                    }
+                }, {
+                    "featureType": "manmade",
+                    "elementType": "geometry",
+                    "stylers": {
+                        "color": "#12223dff"
+                    }
+                }, {
+                    "featureType": "districtlabel",
+                    "elementType": "labels.text.stroke",
+                    "stylers": {
+                        "color": "#ffffffff"
+                    }
+                }, {
+                    "featureType": "entertainment",
+                    "elementType": "geometry",
+                    "stylers": {
+                        "color": "#ffffffff"
+                    }
+                }, {
+                    "featureType": "shopping",
+                    "elementType": "geometry",
+                    "stylers": {
+                        "color": "#12223dff"
+                    }
+                }
+            ]
+        });
+
+    }
+
+    // 初始化地图
+    let map;
+    initMap();
+
+</script>
+</html>

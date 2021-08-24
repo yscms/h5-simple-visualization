@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+    <title>作战安全</title>
+
+    <!--  引入echarts  -->
+    <script src="../libs/js/echarts.js"></script>
+
+    <style type="text/css">
+        html, body {
+            overflow: hidden;
+            height: 100%;
+            background: linear-gradient(#104BAA, #000000);
+            margin: 0;
+            padding: 0;
+        }
+        p, ul, li {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+        .title {
+            width: 80%;
+            height: 80px;
+            font-size: 50px;
+            text-align: center;
+            font-family: Arial, 华文新魏;
+            font-weight: bold;
+            color: #00FFCC;
+            background-color: #0099ff;
+            margin-top: 30px;
+            line-height: 80px;;
+            float: left;
+            background-color: rgba(0, 24, 106, 0.5);
+            border: 1px solid #20558b;
+            box-shadow: 0 0 15px 1px #20558b;
+            position: relative;
+        }
+        .ret {
+            width: 9%;
+            height: 80px;
+            margin-top: 30px;
+            float: left;
+        }
+        .ret img {
+            width: 50px;
+            height: 50px;
+            margin-top: 15px;
+            margin-left: 20px;
+        }
+        .home {
+            width: 9%;
+            height: 80px;
+            margin-top: 30px;
+            float: left;
+        }
+        .home img {
+            width: 50px;
+            height: 50px;
+            margin-top: 15px;
+            margin-left: 20px;
+        }
+        .index {
+            margin-top: 135px;
+        }
+        .index .tit {
+            width: 100%;
+            height: 50px;
+            font-size: 25px;
+            text-align: center;
+            font-family: Arial, 华文新魏;
+            font-weight: bold;
+            line-height: 50px;
+            border-radius: 20px;
+            color: #00FFCC;
+            border-bottom: 1px solid #0099ff;
+            box-shadow: 0 0 15px 1px #20558b;
+        }
+        .index .box {
+            width: 96%;
+            height: 1200px;
+            margin-left: 2%;
+            margin-top: 120px;
+            border: 1px solid #0099ff;
+            box-shadow: 0 0 15px 1px #20558b;
+            border-radius: 25px;
+        }
+        .index .echart {
+            width: 96%;
+            height: 575px;
+            margin-top: 20px;
+            margin-left: 2%;
+            padding-top: 20px;
+            background-color: rgba(0, 24, 106, 0.5);
+            border: 1px solid #20558b;
+            box-shadow: 0 0 15px 1px #20558b;
+            position: relative;
+        }
+        .index #main {
+            width: 100%;
+            height: 600px;
+        }
+        .echarts {
+            width: 200px;
+            height: 250px;
+            color: #00FFCC;
+            font-size: 20px;
+            font-family: Arial, 华文新魏;
+            background-color: rgba(0, 24, 106, 0.5);
+            border: 1px solid #20558b;
+            box-shadow: 0 0 15px 1px #20558b;
+            position: relative;
+        }
+        .moddle {
+            width: 96%;
+            height: 500px;
+            margin-top: 10px;
+            margin-left: 2%;
+            background-color: rgba(0, 24, 106, 0.5);
+            border: 1px solid #20558b;
+            box-shadow: 0 0 15px 1px #20558b;
+            position: relative;
+        }
+        .moddle .ifra {
+            width: 96%;
+            height: 470px;
+            margin-left: 2%;
+            margin-top: 12px;
+        }
+        table {
+            width: 100%;
+            height: 250px;
+            text-align: center;
+            padding-top: 10px;
+        }
+        table img {
+            width: 100%;
+            height: 80px;
+        }
+        .bj-1 {
+            position: absolute;
+            left: -1px;
+            top: -1px;
+        }
+        .bj-2 {
+            position: absolute;
+            right: -1px;
+            top: -1px;
+        }
+        .bj-3 {
+            position: absolute;
+            right: -1px;
+            bottom: -1px;
+        }
+        .bj-4 {
+            position: absolute;
+            left: -1px;
+            bottom: -1px;
+        }
+    </style>
+</head>
+<body>
+<div class="ret">
+    <a href="./index.html">
+        <img src="../libs/img/z_2.png"/>
+    </a>
+</div>
+<div class="title">
+    智慧安全消防信息可视化系统
+    <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+    <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+    <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+    <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+</div>
+<div class="home">
+    <a href="./battle.html">
+        <img src="../libs/img/f_3.png"/>
+    </a>
+</div>
+<div class="index">
+    <div class="box">
+        <div class="tit">
+            消防员信息实时监控
+        </div>
+        <div class="moddle">
+            <iframe class="ifra" src="../libs/model/showModel.html">
+            </iframe>
+            <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+            <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+            <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+            <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+        </div>
+        <div class="echart">
+            <div id="main">
+            </div>
+            <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+            <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+            <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+            <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    
+    // 获取图表的ID值,并设置图表的主题风格
+    let myChart = echarts.init(document.getElementById('main'), 'walden');
+
+    let option = {
+        title: {
+            text: '所在楼层/层',
+            left: '5%',
+            textStyle: {
+                color: '#00FFCC',
+                fontFamily: '华文新魏',
+                fontWeight: 'bold',
+                fontSize: '25',
+                align: 'center'
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross'
+            },
+            formatter: function (params) { // 当鼠标在图表的区域,设置提示栏的CSS样式
+                return '<div class="echarts"><table><tr><td colspan=2""><img src="../libs/img/p.gif"></td></tr><tr><td>消防员姓名</td><td>' + params[0].name + '</td></tr><tr><td>所在楼层</td><td>' + params[0].value + '</td></tr><tr><td>当前温度</td><td>30</td></tr><tr><td>当前气压</td><td>20</td></tr><tr><td>状态</td><td>移动</td></tr></table> <img src="../libs/img/bj-1.png" alt="" class="bj-1"><img src="../libs/img/bj-2.png" alt="" class="bj-2"> <img src="../libs/img/bj-3.png" alt="" class="bj-3"><img src="../libs/img/bj-4.png" alt="" class="bj-4"></div>';
+            }
+        },
+        toolbox: {
+            show: true,
+            right: '100',
+            itemGap: 20,
+            itemSize: '20',
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: {
+                    readOnly: false
+                },
+                magicType: {
+                    type: ['pictorialBar', 'bar']
+                },
+                restore: {},
+                saveAsImage: {}
+            },
+            iconStyle: {
+                borderColor: '#00FFCC'
+            }
+        },
+        xAxis: {
+            data: ['消1号', '消2号', '消3号', '消4号', '消5号'],
+            axisTick: {
+                show: true
+            },
+            axisLine: {
+                show: false
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#00FFCC',
+                    fontFamily: '华文新魏',
+                    fontWeight: 'bold',
+                    fontSize: '20',
+                }
+            }
+        },
+        yAxis: {
+            splitLine: {
+                show: false
+            },
+            axisTick: {
+                show: true
+            },
+            axisLine: {
+                show: false
+            },
+            axisLabel: {
+                show: true,
+                textStyle: {
+                    color: '#00FFCC',
+                    fontFamily: '华文新魏',
+                    fontWeight: 'bold',
+                    fontSize: '20',
+                }
+            }
+
+        },
+        color: ['#ffffff'],
+        series: [{
+            name: '海拔高度',
+            type: 'effectScatter',
+            rippleEffect: {
+                brushType: 'stroke'
+            },
+            symbolSize: 25,
+            hoverAnimation: true,
+            barCategoryGap: '-130%',
+            symbol: 'circle',
+            itemStyle: {
+                normal: {
+                    color: '#FF00FF'
+                },
+                emphasis: {
+                    color: '#FF00FF'
+                }
+            },
+            data: [5, 0, 1, 5, 3],
+            z: 10
+        }],
+    };
+
+    myChart.setOption(option);
+
+    // 设置点击跳转方法,并传送图表X属性的值
+    myChart.on('click', function (params) {
+        if (params.name == '消91号') {
+            window.open('new_data.html?a=' + encodeURIComponent(params.name) + '');
+        }
+    });
+</script>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" name="viewport"/>
+    <title> 作战安全</title>
+
+    <!--  引入echarts  -->
+    <script src="../libs/js/echarts.js"></script>
+
+    <style type="text/css">
+        html, body {
+            overflow: hidden;
+            height: 100%;
+            background: linear-gradient(#104BAA, #000000);
+            margin: 0;
+            padding: 0;
+        }
+        p, ul, li {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+        .title {
+            width: 80%;
+            height: 80px;
+            font-size: 50px;
+            text-align: center;
+            font-family: Arial, 华文新魏;
+            font-weight: bold;
+            color: #00FFCC;
+            background-color: #0099ff;
+            margin-top: 30px;
+            line-height: 80px;;
+            float: left;
+            background-color: rgba(0, 24, 106, 0.5);
+            border: 1px solid #20558b;
+            box-shadow: 0 0 15px 1px #20558b;
+            position: relative;
+        }
+        .ret {
+            width: 9%;
+            height: 80px;
+            margin-top: 30px;
+            float: left;
+        }
+        .ret img {
+            width: 50px;
+            height: 50px;
+            margin-top: 15px;
+            margin-left: 20px;
+        }
+        .home {
+            width: 9%;
+            height: 80px;
+            margin-top: 30px;
+            float: left;
+        }
+        .home img {
+            width: 50px;
+            height: 50px;
+            margin-top: 15px;
+            margin-left: 20px;
+        }
+        .index {
+            margin-top: 135px;
+        }
+        .index .tit {
+            width: 100%;
+            height: 50px;
+            font-size: 25px;
+            text-align: center;
+            font-family: Arial, 华文新魏;
+            font-weight: bold;
+            line-height: 50px;
+            border-radius: 20px;
+            color: #00FFCC;
+            border-bottom: 1px solid #0099ff;
+            box-shadow: 0 0 15px 1px #20558b;
+        }
+        .index .box {
+            width: 96%;
+            height: 1200px;
+            margin-left: 2%;
+            margin-top: 120px;
+            border: 1px solid #0099ff;
+            box-shadow: 0 0 15px 1px #20558b;
+            border-radius: 25px;
+        }
+        .index .echart {
+            width: 96%;
+            height: 600px;
+            margin-top: 20px;
+            margin-left: 2%;
+            background-color: rgba(0, 24, 106, 0.5);
+            border: 1px solid #20558b;
+            box-shadow: 0 0 15px 1px #20558b;
+            position: relative;
+        }
+        .index .echart li {
+            width: 47%;
+            height: 270px;
+            margin-left: 2%;
+            margin-top: 20px;
+            float: left;
+            background-color: rgba(0, 24, 106, 0.5);
+            border: 1px solid #20558b;
+            box-shadow: 0 0 15px 1px #20558b;
+            position: relative;
+        }
+        .index .echart li .chart_p {
+            width: 100%;
+            height: 35px;
+            font-size: 20px;
+            text-align: center;
+            font-family: Arial, 华文新魏;
+            font-weight: bold;
+            color: #00FFCC;
+            border-bottom: 1px solid #20558b;
+            line-height: 35px;
+            box-shadow: 0 0 15px 1px #20558b;
+        }
+        .index .echart li .ech {
+            width: 80%;
+            height: 200px;
+            border: 1px solid #0099ff;
+            margin-left: 10%;
+            margin-top: 12px;
+        }
+        .moddle {
+            width: 96%;
+            height: 500px;
+            margin-top: 10px;
+            margin-left: 2%;
+            background-color: rgba(0, 24, 106, 0.5);
+            border: 1px solid #20558b;
+            box-shadow: 0 0 15px 1px #20558b;
+            position: relative;
+        }
+        .moddle .ifra {
+            width: 96%;
+            height: 470px;
+            margin-left: 2%;
+            margin-top: 12px;
+        }
+        table {
+            width: 100%;
+            height: 250px;
+            text-align: center;
+            padding-top: 10px;
+        }
+        table img {
+            width: 100%;
+            height: 80px;
+        }
+        .bj-1 {
+            position: absolute;
+            left: -1px;
+            top: -1px;
+        }
+        .bj-2 {
+            position: absolute;
+            right: -1px;
+            top: -1px;
+        }
+        .bj-3 {
+            position: absolute;
+            right: -1px;
+            bottom: -1px;
+        }
+        .bj-4 {
+            position: absolute;
+            left: -1px;
+            bottom: -1px;
+        }
+    </style>
+</head>
+<body>
+<div class="ret">
+    <a href="./index.html">
+        <img src="../libs/img/z_2.png"/>
+    </a>
+</div>
+<div class="title">
+    智慧安全消防信息可视化系统
+    <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+    <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+    <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+    <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+</div>
+<div class="home">
+    <a href="./battle.html">
+        <img src="../libs/img/f_3.png"/>
+    </a>
+</div>
+<div class="index">
+    <div class="box">
+        <div class="tit">
+            一号水罐泡沫消防车信息实时监控
+        </div>
+        <div class="moddle">
+            <iframe class="ifra" src="../libs/model/max_1.html">
+            </iframe>
+            <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+            <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+            <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+            <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+        </div>
+        <div class="echart">
+            <ul>
+                <li>
+                    <p class="chart_p">
+                        液位监测状态：
+                        <span style="color: #00FF66;">正常</span>
+                    </p>
+                    <div id="chart_1" style="width: 400px;height:250px;margin: 0 0 0 20px;padding: 0;">
+                    </div>
+                    <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+                    <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+                    <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+                    <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+                </li>
+                <li>
+                    <p class="chart_p">
+                        发动机转速监测状态：
+                        <span style="color: #00FF66;">正常</span>
+                    </p>
+                    <div id="chart_2" style="width: 400px;height:250px;margin: 0 0 0 20px;padding: 0;">
+                    </div>
+                    <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+                    <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+                    <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+                    <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+                </li>
+                <li>
+                    <p class="chart_p">
+                        油量监测状态：
+                        <span style="color: #00FF66;">正常</span>
+                    </p>
+                    <div id="chart_3" style="width: 400px;height:250px;margin: 0 0 0 20px;padding: 0;">
+                    </div>
+                    <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+                    <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+                    <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+                    <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+                </li>
+                <li>
+                    <p class="chart_p">
+                        电池电压状态：
+                        <span style="color: #FF00FF;">偏低</span>
+                    </p>
+                    <div id="chart_4" style="width: 400px;height:250px;margin: 0 0 0 20px;padding: 0;">
+                    </div>
+                    <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+                    <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+                    <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+                    <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+                </li>
+            </ul>
+            <img alt="" class="bj-1" src="../libs/img/bj-1.png">
+            <img alt="" class="bj-2" src="../libs/img/bj-2.png">
+            <img alt="" class="bj-3" src="../libs/img/bj-3.png">
+            <img alt="" class="bj-4" src="../libs/img/bj-4.png">
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    
+    // 基于准备好的dom，初始化echarts实例
+    let myChart_1 = echarts.init(document.getElementById('chart_1'));
+
+    // 指定图表的配置项和数据
+    let option_1 = {
+        tooltip: {
+            formatter: "{a} <br/>{b} : {c}%",
+            fontsize: "12"
+        },
+        series: [{
+            name: '业务指标',
+            type: 'gauge',
+            detail: {formatter: '{value}%'},
+            data: [{value: 45}],
+            textStyle: {
+                color: '#0099ff'
+            }
+        }],
+        left: 'center',
+        textStyle: {
+            fontSize: 12,
+            color: '#0099ff'
+        }
+    };
+
+    // 基于准备好的dom，初始化echarts实例
+    let myChart_2 = echarts.init(document.getElementById('chart_2'));
+
+    // 指定图表的配置项和数据
+    let option_2 = {
+        tooltip: {
+            formatter: "{a} <br/>{b} : {c}%",
+            fontsize: "12"
+        },
+        series: [{
+            name: '业务指标',
+            type: 'gauge',
+            detail: {formatter: '{value}%'},
+            data: [{value: 45}]
+        }],
+        left: 'center',
+        textStyle: {
+            fontSize: 12,
+            color: 'red'
+        }
+    };
+
+    // 基于准备好的dom，初始化echarts实例
+    let myChart_3 = echarts.init(document.getElementById('chart_3'));
+
+    // 指定图表的配置项和数据
+    let option_3 = {
+        tooltip: {
+            formatter: "{a} <br/>{b} : {c}%",
+            fontsize: "12"
+        },
+        series: [{
+            name: '业务指标',
+            type: 'gauge',
+            detail: {formatter: '{value}%'},
+            data: [{value: 45}]
+        }],
+        left: 'center',
+        textStyle: {
+            fontSize: 12,
+            color: 'red'
+        }
+    };
+
+    // 基于准备好的dom，初始化echarts实例
+    let myChart_4 = echarts.init(document.getElementById('chart_4'));
+
+    // 指定图表的配置项和数据
+    let option_4 = {
+        tooltip: {
+            formatter: "{a} <br/>{b} : {c}%",
+            fontsize: "12"
+        },
+        series: [{
+            name: '业务指标',
+            type: 'gauge',
+            detail: {formatter: '{value}%'},
+            data: [{value: 45}],
+            axisLine: {
+                lineStyle: {
+                    color: [[0.2, '#33ffcc'], [0.8, '#0099ff'], [1, '#ff33cc']]
+                }
+            }
+        }],
+        left: 'center',
+        textStyle: {
+            fontSize: 12,
+            color: 'red'
+        }
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart_1.setOption(option_1);
+    myChart_2.setOption(option_2);
+    myChart_3.setOption(option_3);
+    myChart_4.setOption(option_4);
+
+    // 把option.series[0].data[0].value的值使用random()方法获取一个随机数
+    setInterval(function () {
+        option_1.series[0].data[0].value = (Math.random() * 100).toFixed(0) - 0;
+        myChart_1.setOption(option_1, true);
+        option_2.series[0].data[0].value = (Math.random() * 100).toFixed(0) - 0;
+        myChart_2.setOption(option_2, true);
+        option_3.series[0].data[0].value = (Math.random() * 100).toFixed(0) - 0;
+        myChart_3.setOption(option_3, true);
+        option_4.series[0].data[0].value = (Math.random() * 100).toFixed(0) - 0;
+        myChart_4.setOption(option_4, true);
+    }, 2000);
+</script>
